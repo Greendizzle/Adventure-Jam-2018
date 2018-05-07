@@ -5,30 +5,37 @@ using UnityEngine;
 public class PlayerMove : MonoBehaviour {
     public float speed = 5f;
     public float jumpSpeed = 8f;
-    private float movement = 0f;
+    private float horizontal = 0f;
     private Rigidbody2D rigidBody;
     public Transform groundCheckPoint;
     public float groundCheckRadius;
     public LayerMask groundLayer;
     private bool isTouchingGround;
+    private bool facingRight;
     // Use this for initialization
     void Start()
     {
         rigidBody = GetComponent<Rigidbody2D>();
+        facingRight = true;
+        rigidBody.freezeRotation = true;
     }
 
     // Update is called once per frame
     void Update()
     {
+        float horizontal = Input.GetAxis("Horizontal");
+       
+        flip(horizontal);
+
         isTouchingGround = Physics2D.OverlapCircle(groundCheckPoint.position, groundCheckRadius, groundLayer);
-        movement = Input.GetAxis("Horizontal");
-        if (movement > 0f)
+
+        if (horizontal > 0f)
         {
-            rigidBody.velocity = new Vector2(movement * speed, rigidBody.velocity.y);
+            rigidBody.velocity = new Vector2(horizontal * speed, rigidBody.velocity.y);
         }
-        else if (movement < 0f)
+        else if (horizontal < 0f)
         {
-            rigidBody.velocity = new Vector2(movement * speed, rigidBody.velocity.y);
+            rigidBody.velocity = new Vector2(horizontal * speed, rigidBody.velocity.y);
         }
         else
         {
@@ -37,8 +44,25 @@ public class PlayerMove : MonoBehaviour {
         if (Input.GetButtonDown("Jump") && isTouchingGround)
         {
             rigidBody.velocity = new Vector2(rigidBody.velocity.x, jumpSpeed);
+
         }
+
     }
+    private void flip(float horizontal) {
+        if (horizontal > 0 && !facingRight || horizontal < 0 && facingRight) {
+            facingRight = !facingRight;
+            Vector3 theScale = transform.localScale;
+
+            theScale.x *= -1;
+            transform.localScale = theScale;
+
+
+        }
+
+    }
+
+
+    
 }
 
 
