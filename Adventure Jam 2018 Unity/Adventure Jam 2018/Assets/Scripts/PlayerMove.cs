@@ -23,20 +23,7 @@ public class PlayerMove : MonoBehaviour {
 
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown("space"))
-        {
-            jump(); 
-        }
-    }
-
-    void jump() {
-        Rb.AddForce(new Vector2(0, jumpForce));
-        Debug.Log("Space Pressed");
-
-    }
-
+    
 }
 
 
